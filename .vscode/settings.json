@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"**/src/_assets/css/**/*.css": "tailwindcss"
+	},
+	"emmet.includeLanguages": {
+		"njk": "html"
+	},
+}

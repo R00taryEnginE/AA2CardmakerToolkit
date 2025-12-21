@@ -1,0 +1,98 @@
+---
+layout: base.njk
+title: Editor Reference
+---
+
+<script type="application/json" id="editor-data">
+  {{ editorData | dump | safe }}
+</script>
+
+<script>
+function editorApp() {
+  return {
+    type: 'female',
+    editorData: JSON.parse(
+      document.getElementById('editor-data').textContent
+    ),
+    get filteredData() {
+      return this.editorData
+        .map(section => {
+          const filteredItems = section.data.filter(item =>
+            item.type === this.type || item.type == null
+          );
+
+          return {
+            ...section,
+            data: filteredItems
+          };
+        })
+        .filter(section => section.data.length > 0);
+    },
+    get formattedNotes() {
+      return this.data.notes?.replace(/;\s*/g, "\n");
+    }
+  }
+}
+
+document.addEventListener('alpine:init', () => {
+  Alpine.data('copyBtn', (text) => ({
+    copied: false,
+    copy() {
+      navigator.clipboard.writeText(text);
+      this.copied = true;
+      setTimeout(() => this.copied = false, 1200);
+    }
+  }));
+});
+</script>
+
+<main id="main" class="flex lg:pt-32 gap-1 p-6 max-w-6xl mx-auto">
+  <div x-data="editorApp()">
+    <fieldset class="fieldset mb-5">
+      <legend class="fieldset-legend">Select card type</legend>
+      <select class="select" x-model="type">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+      </select>
+    </fieldset>
+
+    <template x-for="section in filteredData" :key="section.category">
+      <div class="editor-section">
+        <h3 x-text="section.category" class="text-xl font-semibold mb-4"></h3>
+
+        <div class="overflow-x-auto rounded-box border border-base-content/5 mb-5">
+          <table class="table table-auto w-full">
+            <thead>
+              <tr>
+                <template x-for="header in section.headers" :key="header">
+                  <th x-text="header"></th>
+                </template>
+              </tr>
+            </thead>
+
+            <tbody>
+              <template x-for="data in section.data" :key="data.name">
+                <tr class="hover:bg-base-300">
+                  <td>
+                    <div>
+                      <button
+                        x-data="copyBtn(data.name)"
+                        @click="copy"
+                        class="btn btn-xs btn-ghost tooltip"
+                        :data-tip="copied ? 'Copied!' : 'Copy'"
+                        x-text="data.name"
+                      >📋</button>
+                    </div>
+                  </td>
+                  <td x-text="data.description" class="text-secondary-content"></td>
+                  <td x-text="formattedNotes" class="whitespace-pre-line"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </template>
+
+  </div>
+</main>
