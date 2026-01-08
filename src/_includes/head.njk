@@ -1,13 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Set the base URL for all relative URLs within the document -->
-{% if site.env %}
-  <base href="{{ site.url }}/">
-{% else %}
-  <base href="/">
-{% endif %}
-
 <meta name="description" content="{% if description %}{{ description }}{% else %}{{ site.description }}{% endif %}">
 
 <meta name="robots" content="index,follow">

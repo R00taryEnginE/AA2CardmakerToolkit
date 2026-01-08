@@ -1,1 +1,1 @@
-// Clean
+require("@zachleat/heading-anchors");
