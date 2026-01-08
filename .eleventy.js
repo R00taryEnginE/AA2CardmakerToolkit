@@ -14,7 +14,7 @@ module.exports = async function (eleventyConfig) {
 	// Plugins
 	eleventyConfig.addPlugin(IdAttributePlugin);
   eleventyConfig.addPlugin(HtmlBasePlugin, {
-		baseHref: isProduction ? "https://r00taryengine.github.io/AA2CardmakerToolkit/" : "/",
+		baseHref: isProduction ? "/AA2CardmakerToolkit/" : "/",
 	});
 
 	// Filter to parse dates
