@@ -6,16 +6,12 @@ const YAML = require("yaml");
 
 module.exports = async function (eleventyConfig) {
 	const { IdAttributePlugin } = await import("@11ty/eleventy");
-  const { HtmlBasePlugin } = await import("@11ty/eleventy");
 
 	// Folders to copy to build dir
 	eleventyConfig.addPassthroughCopy("src/static");
 
 	// Plugins
 	eleventyConfig.addPlugin(IdAttributePlugin);
-  eleventyConfig.addPlugin(HtmlBasePlugin, {
-		baseHref: isProduction ? "/AA2CardmakerToolkit/" : "/",
-	});
 
 	// Filter to parse dates
 	eleventyConfig.addFilter("htmlDateString", function (dateObj) {
