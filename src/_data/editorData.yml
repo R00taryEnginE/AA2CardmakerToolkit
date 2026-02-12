@@ -126,7 +126,7 @@
       type: "female"
     - name: "A00_10_00_00_99.bmp"
       description: "Blush Specular Texture"
-      notes: "Not very useful"
+      notes: "Blush has its own \"white dots\", this can be used to remove them or change their color"
       type: "female"
     - name: "EyeBrow_Outline.bmp"
       description: "Eyebrow Outline Color"
