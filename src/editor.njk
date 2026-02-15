@@ -11,14 +11,85 @@ title: Editor Reference
 function editorApp() {
   return {
     type: 'female',
+    height: 'normal',
+    weight: 'normal',
+    hipixel: 'no',
+    activeTab: '',
     editorData: JSON.parse(
       document.getElementById('editor-data').textContent
     ),
+    init() {
+      this.applyTypeDefaults();
+      this.$watch('type', () => {
+        this.applyTypeDefaults();
+      });
+      this.$watch('filteredData', (newData) => {
+        if (newData.length > 0 && !newData.some(s => s.category === this.activeTab)) {
+          this.activeTab = newData[0].category;
+        }
+      });
+      // Set first tab as active by default
+      if (this.filteredData.length > 0) {
+        this.activeTab = this.filteredData[0].category;
+      }
+    },
+    get heightOptions() {
+      if (this.type === 'female') {
+        return [
+          { value: 'short', label: 'Short' },
+          { value: 'normal', label: 'Normal' },
+          { value: 'tall', label: 'Tall' }
+        ];
+      }
+
+      return [
+        { value: 'delicate', label: 'Delicate' },
+        { value: 'normal', label: 'Normal' },
+        { value: 'tall', label: 'Tall' },
+        { value: 'fat', label: 'Fat' }
+      ];
+    },
+    get weightOptions() {
+      if (this.type !== 'female') {
+        return [];
+      }
+
+      return [
+        { value: 'thin', label: 'Thin' },
+        { value: 'normal', label: 'Normal' },
+        { value: 'chubby', label: 'Chubby' }
+      ];
+    },
+    get hipixelOptions() {
+      return [
+        { value: 'no', label: 'No' },
+        { value: '1k', label: '1K' },
+        { value: '2k', label: '2K' }
+      ];
+    },
+    applyTypeDefaults() {
+      const heightValues = this.heightOptions.map(option => option.value);
+      if (!heightValues.includes(this.height)) {
+        this.height = 'normal';
+      }
+
+      if (this.weightOptions.length === 0) {
+        this.weight = null;
+        return;
+      }
+
+      const weightValues = this.weightOptions.map(option => option.value);
+      if (!weightValues.includes(this.weight)) {
+        this.weight = 'normal';
+      }
+    },
     get filteredData() {
       return this.editorData
         .map(section => {
           const filteredItems = section.data.filter(item =>
-            item.type === this.type || item.type == null
+            (item.type === this.type || item.type == null) &&
+            this.matchesFilter(item.height, this.height) &&
+            this.matchesFilter(item.weight, this.weight)
           );
 
           return {
@@ -28,71 +99,223 @@ function editorApp() {
         })
         .filter(section => section.data.length > 0);
     },
-    get formattedNotes() {
-      return this.data.notes?.replace(/;\s*/g, "\n");
+    get activeSection() {
+      return this.filteredData.find(section => section.category === this.activeTab);
+    },
+    matchesFilter(itemValue, selectedValue) {
+      if (itemValue == null || selectedValue == null) {
+        return true;
+      }
+
+      if (Array.isArray(itemValue)) {
+        return itemValue.includes(selectedValue);
+      }
+
+      return itemValue === selectedValue;
+    },
+    get heightToken() {
+      if (this.type === 'female') {
+        return { short: '0', normal: '1', tall: '2' }[this.height];
+      }
+
+      return { delicate: '0', normal: '1', tall: '2', fat: '3' }[this.height];
+    },
+    get weightToken() {
+      if (this.type !== 'female') {
+        return null;
+      }
+
+      return { thin: '0', normal: '1', chubby: '2' }[this.weight];
+    },
+    get hipixelToken() {
+      if (this.hipixel === 'no') {
+        return '';
+      }
+
+      if (this.type !== 'female') {
+        return this.hipixel === '1k' ? 'S00-1K' : 'S00-2K';
+      }
+
+      return this.hipixel === '1k' ? 'A00-1K' : 'A00-2K';
+    },
+    applyPlaceholders(text) {
+      if (!text) {
+        return '';
+      }
+
+      let output = String(text);
+      if (this.heightToken) {
+        output = output.replace(/\$\{height\}/g, this.heightToken);
+      }
+
+      if (this.weightToken) {
+        output = output.replace(/\$\{weight\}/g, this.weightToken);
+      }
+
+      // Handle ${hipixel:default} syntax
+      output = output.replace(/\$\{hipixel(?::([^}]+))?\}/g, (match, defaultValue) => {
+        if (this.hipixel === 'no') {
+          return defaultValue || '';
+        }
+        return this.hipixelToken;
+      });
+
+      return output;
+    },
+    applyHighlightedPlaceholders(text) {
+      if (!text) {
+        return '';
+      }
+
+      let output = text;
+      if (this.heightToken) {
+        output = output.replace(/\$\{height\}/g, `<span class="text-pink-300">${this.heightToken}</span>`);
+      }
+
+      if (this.weightToken) {
+        output = output.replace(/\$\{weight\}/g, `<span class="text-blue-300">${this.weightToken}</span>`);
+      }
+
+      // Handle ${hipixel:default} syntax
+      output = output.replace(/\$\{hipixel(?::([^}]+))?\}/g, (match, defaultValue) => {
+        if (this.hipixel === 'no') {
+          return defaultValue || '';
+        }
+        return `<span class="text-green-300">${this.hipixelToken}</span>`;
+      });
+
+      return output;
+    },
+    formatName(name) {
+      return this.applyPlaceholders(name);
+    },
+    formatNameHtml(name) {
+      return this.applyHighlightedPlaceholders(name);
+    },
+    formatNotes(notes) {
+      return this.applyPlaceholders(notes).replace(/;\s*/g, "\n");
+    },
+    formatNotesHtml(notes) {
+      return this.applyHighlightedPlaceholders(notes).replace(/;\s*/g, "<br class='my-1'>");
+    },
+    copyToClipboard(text) {
+      if (!text) {
+        return;
+      }
+
+      navigator.clipboard.writeText(text);
     }
   }
 }
-
-document.addEventListener('alpine:init', () => {
-  Alpine.data('copyBtn', (text) => ({
-    copied: false,
-    copy() {
-      navigator.clipboard.writeText(text);
-      this.copied = true;
-      setTimeout(() => this.copied = false, 1200);
-    }
-  }));
-});
 </script>
 
-<main id="main" class="flex lg:pt-32 gap-1 p-6 max-w-6xl mx-auto">
+<main id="main" class="lg:pt-32 p-6 max-w-7xl mx-auto">
   <div x-data="editorApp()">
-    <fieldset class="fieldset mb-5">
-      <legend class="fieldset-legend">Select card type</legend>
-      <select class="select" x-model="type">
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-      </select>
-    </fieldset>
 
-    <template x-for="section in filteredData" :key="section.category">
-      <div class="editor-section">
-        <h3 x-text="section.category" class="text-xl font-semibold mb-4"></h3>
+    <div class="bg-base-200 rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-semibold mb-4">Filters</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 
-        <div class="overflow-x-auto rounded-box border border-base-content/5 mb-5">
-          <table class="table table-auto w-full">
-            <thead>
-              <tr>
-                <template x-for="header in section.headers" :key="header">
-                  <th x-text="header"></th>
-                </template>
-              </tr>
-            </thead>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Card type</legend>
+          <select class="select" x-model="type">
+            <option value="female" :selected="type === 'female'">Female</option>
+            <option value="male" :selected="type === 'male'">Male</option>
+          </select>
+        </fieldset>
 
-            <tbody>
-              <template x-for="data in section.data" :key="data.name">
-                <tr class="hover:bg-base-300">
-                  <td>
-                    <div>
-                      <button
-                        x-data="copyBtn(data.name)"
-                        @click="copy"
-                        class="btn btn-xs btn-ghost tooltip"
-                        :data-tip="copied ? 'Copied!' : 'Copy'"
-                        x-text="data.name"
-                      >📋</button>
-                    </div>
-                  </td>
-                  <td x-text="data.description" class="text-secondary-content"></td>
-                  <td x-text="formattedNotes" class="whitespace-pre-line"></td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-pink-300">Height</legend>
+          <select class="select" x-model="height">
+            <template x-for="option in heightOptions" :key="option.value">
+              <option :value="option.value" :selected="option.value === height" x-text="option.label"></option>
+            </template>
+          </select>
+        </fieldset>
+
+        <fieldset class="fieldset" x-show="weightOptions.length">
+          <legend class="fieldset-legend text-blue-300">Weight</legend>
+          <select class="select" x-model="weight">
+            <template x-for="option in weightOptions" :key="option.value">
+              <option :value="option.value" :selected="option.value === weight" x-text="option.label"></option>
+            </template>
+          </select>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-green-300">Hipixel Skin</legend>
+          <select class="select" x-model="hipixel">
+            <template x-for="option in hipixelOptions" :key="option.value">
+              <option :value="option.value" :selected="option.value === hipixel" x-text="option.label"></option>
+            </template>
+          </select>
+          <span class="label">If you don't know what this is, leave it on 'No'</span>
+        </fieldset>
+
       </div>
-    </template>
+    </div>
+
+    <div role="tablist" class="join">
+      <template x-for="section in filteredData" :key="section.category">
+        <button
+          role="tab"
+          class="btn"
+          :class="{ 'btn-primary': activeTab === section.category }"
+          @click="activeTab = section.category"
+          x-text="section.category"
+        ></button>
+      </template>
+    </div>
+
+    <!-- Active Tab Content -->
+    <div class="bg-base-100 border border-base-300 rounded-b-lg rounded-tr-lg p-6">
+      <template x-if="activeSection">
+        <div>
+          <div class="overflow-x-auto">
+            <table class="table table-pin-rows">
+              <thead>
+                <tr>
+                  <template x-for="header in activeSection.headers" :key="header">
+                    <th class="bg-base-200" x-text="header"></th>
+                  </template>
+                </tr>
+              </thead>
+
+              <tbody>
+                <template x-for="data in activeSection.data" :key="data.name">
+                  <tr class="hover:bg-base-200">
+                    <td class="font-mono text-sm">
+                      <button
+                        x-data="{ copied: false }"
+                        @click="copyToClipboard(formatName(data.name)); copied = true; setTimeout(() => copied = false, 1200)"
+                        class="btn btn-xs tooltip"
+                        :class="{ 'btn-success': copied }"
+                        :data-tip="copied ? 'Copied!' : 'Click to copy'"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                          <path fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937V7A2.5 2.5 0 0 0 10 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2ZM10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4h3Z" clip-rule="evenodd" />
+                          <path fill-rule="evenodd" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H3Zm1.75 2.5a.75.75 0 0 0 0 1.5h3.5a.75.75 0 0 0 0-1.5h-3.5ZM4 11.75a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                        </svg>
+
+                        <span x-html="formatNameHtml(data.name)"></span>
+                      </button>
+                    </td>
+                    <td x-text="data.description"></td>
+                    <td class="text-sm opacity-80" x-html="formatNotesHtml(data.notes)"></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="!activeSection">
+        <div class="text-center py-12 opacity-60">
+          <p class="text-lg">No data available for the selected filters</p>
+        </div>
+      </template>
+    </div>
 
   </div>
 </main>
