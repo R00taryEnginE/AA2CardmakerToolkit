@@ -115,17 +115,17 @@ function editorApp() {
     },
     get heightToken() {
       if (this.type === 'female') {
-        return { short: '0', normal: '1', tall: '2' }[this.height];
+        return { short: '00', normal: '01', tall: '02' }[this.height];
       }
 
-      return { delicate: '0', normal: '1', tall: '2', fat: '3' }[this.height];
+      return { delicate: '00', normal: '01', tall: '02', fat: '03' }[this.height];
     },
     get weightToken() {
       if (this.type !== 'female') {
         return null;
       }
 
-      return { thin: '0', normal: '1', chubby: '2' }[this.weight];
+      return { thin: '00', normal: '01', chubby: '02' }[this.weight];
     },
     get hipixelToken() {
       if (this.hipixel === 'no') {

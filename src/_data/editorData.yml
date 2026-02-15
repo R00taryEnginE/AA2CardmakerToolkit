@@ -7,135 +7,172 @@
   data:
     - name: "A00_20_00_00_00.tga"
       description: "Hair Texture"
+
     - name: "${hipixel:A00}_10_00_##_00.tga"
       description: "Face Texture"
       notes: "## - Slot number"
       type: "female"
+
     - name: "${hipixel:S00}_10_00_##_00.tga"
       description: "Face Texture"
-      notes: "A00-1K/A00-2K prefix if using 1K/2K textures; ## - Face slot number"
+      notes: "## - Face slot number"
       type: "male"
+
     - name: "${hipixel:A00}_00_00_00_00.tga"
       description: "Body Texture"
       type: "female"
-    - name: "${hipixel:S00}_00_00_0${height}_00.tga"
+
+    - name: "${hipixel:S00}_00_00_${height}_00.tga"
       description: "Body Texture"
       type: "male"
+
     - name: "${hipixel:A00}_00_00_00_01.tga"
       description: "Arms Texture"
       type: "female"
-	  - name: "${hipixel:S00}_00_00_##_01.tga"
+
+    - name: "${hipixel:S00}_00_00_${height}_01.tga"
       description: "Arms Texture"
-      notes: "S00-1K/S00-2K prefix if using 1K/2K textures; ## - corresponds to body type 00 to 04"
       type: "male"
+
     - name: "${hipixel:A00}_00_00_00_02.tga"
       description: "Anus Texture"
+      notes: "Almost impossible to see. Probably the most useless texture in the game."
       type: "female"
-    - name: "A00_00_00_00_03.tga"
+
+    - name: "${hipixel:A00}_00_00_00_03.tga"
       description: "Nails Texture"
-      notes: "A00-1K/A00-2K prefix if using 1K/2K textures; you may be better suited using the Tot nail overrides."
+      notes: "Much better results by using the nail overrides instead."
       type: "female"
-	  - name: "S00_00_00_##_02.tga"
+
+    - name: "${hipixel:S00}_00_00_${height}_02.tga"
       description: "Nails Texture"
-      notes: "S00-1K/S00-2K prefix if using 1K/2K textures; ## - corresponds to body type 00 to 04; Males do not have an anus texture."
       type: "male"
+
     - name: "AA00_00_00_00.bmp"
       description: "Body Shadow"
       type: "female"
+
     - name: "SS00_00_00_00.bmp"
       description: "Body Shadow"
       type: "male"
+
     - name: "AA00_20_00_00.bmp"
       description: "Hair Shadow"
       type: "female"
+
     - name: "A00_01_##_00_$$.tga"
       description: "Nipples Texture"
       notes: "A00-HP_01_00_00_00.tga if using HiPixel Skin; ## - Slot number; $$ - Color number"
       type: "female"
+
     - name: "S00_01_##_00_$$.tga"
       description: "Nipples Texture"
-      notes: "S00-HP_01_00_00_00.tga if using any high res texture; ## - Slot number; $$ - Color number"
+      notes: "S00-HP_01_00_00_00.tga if using HiPixel Skin; ## - Slot number; $$ - Color number"
       type: "male"
+
     - name: "A00_11_00_00_00.bmp"
       description: "Eyebrows Texture"
-	    type: "female"
+      type: "female"
+
     - name: "S00_11_00_00_00.bmp"
       description: "Eyebrows Texture"
-	    type: "male"
+      type: "male"
+
     - name: "A00_14_00_00_$$.tga"
       description: "Lipstick Texture"
       notes: "$$ - Color number"
       type: "female"
+
     - name: "A00_10_##_00.xx"
       description: "Face Mesh"
-      notes: "## - Slot number; Slot number is not the same as the face type name which typically contains a number."
+      notes: "## - Slot number (default slot is 00); Slot number is not the same as the face type name which typically contains a number."
       type: "female"
+
     - name: "S00_10_##_00.xx"
       description: "Face Mesh"
-      notes: "## - Slot number; Slot number is not the same as the face type name which typically contains a number."
+      notes: "## - Slot number (default slot is 00); Slot number is not the same as the face type name which typically contains a number."
       type: "male"
+
     - name: "A00_10_##_00.xa"
       description: "Face Animator"
-      notes: "Defines morph targets for facial expressions; ## - Slot number; Slot number is not the same as the face type name which typically contains a number."
+      notes: "Defines morph targets for facial expressions; ## - Slot number (default slot is 00); Slot number is not the same as the face type name which typically contains a number."
       type: "female"
+
     - name: "S00_10_##_00.xa"
       description: "Face Animator"
-      notes: "Defines morph targets for facial expressions; ## - Slot number; Slot number is not the same as the face type name which typically contains a number."
+      notes: "Defines morph targets for facial expressions; ## - Slot number (default slot is 00); Slot number is not the same as the face type name which typically contains a number."
       type: "male"
-    - name: "A00_00_0${height}_00h.xx"
+
+    - name: "A00_00_${height}_00h.xx"
       description: "Skeleton Mesh"
       type: "female"
-    - name: "S00_00_0$_00h.xx"
+
+    - name: "S00_00_${height}_00h.xx"
       description: "Skeleton Mesh"
-      notes: "$ - Height variant (0 = delicate, 1 = normal, 2 = tall, 3 = fat)"
       type: "male"
-    - name: "A00_00_0${height}_00.xx"
+
+    - name: "A00_00_${height}_00.xx"
       description: "Body Mesh"
       type: "female"
-    - name: "S00_00_0$_00.xx"
+
+    - name: "S00_00_${height}_00.xx"
       description: "Body Mesh"
-      notes: "$ - Height variant (0 = delicate, 1 = normal, 2 = tall, 3 = fat)"
       type: "male"
-    - name: "A01_00_0${height}_00.xx"
+
+    - name: "A01_00_${height}_00.xx"
       description: "Legs Mesh"
       type: "female"
-  	- name: "S01_00_0$_00.xx"
+
+    - name: "S01_00_${height}_00.xx"
       description: "Legs Mesh"
-      notes: "$ - Height variant (0 = delicate, 1 = normal, 2 = tall, 3 = fat)"
       type: "male"
-    - name: "A00_@_0${height}_0*.xx"
+
+    - name: "A00_@_${height}_0*.xx"
       description: "Clothes Mesh"
       notes: "@ - Slot number (ex: 00 - default sailor uniform); * - Clothes state (1-4)"
       type: "female"
-    - name: "S00_@_0$_01.xx"
+
+    - name: "S00_@_${height}_01.xx"
       description: "Clothes Mesh"
-      notes: "@ - Slot number (ex: 00 - default sailor uniform); $ - Height variant (0 = delicate, 1 = normal, 2 = tall, 3 = fat); Males do not have support for clothing states, skirts, or SVIEX."
-      type: "female"
+      notes: "@ - Slot number (ex: 00 - default sailor uniform); Males do not have support for clothing states, skirts, or SVIEX."
+      type: "male"
+
     - name: "A00_0*_O_slot@.sviex"
       description: "Clothes SVIEX"
       notes: "@ - Slot number (ex: 00 - default sailor uniform); * - Clothes state (1-4); File endings: _ho = thin _de = chubby _D/_S= Big/small.; Example: A00_01_O_slot00_de_D.sviex = sailor uniform, state 1, slot 00, chubby, tall"
       type: "female"
-    - name: "A02_@_00_0${weight}.xx"
+
+    - name: "A02_@_00_${weight}.xx"
       description: "Skirt Mesh"
       notes: "@ - Slot number (ex: 00 - default sailor uniform)"
       type: "female"
+
     - name: "A02_@_00_01.bps"
       description: "Skirt Physics"
       notes: "@ - Slot number (ex: 00 - default sailor uniform)"
       type: "female"
+
     - name: "AS00_**_##_$$.xx"
       description: "Hair Mesh"
       notes: "** - Hair section (20 = front, 21 = side, 22 = back, 23 = extension); ## - Slot number; $$ - Flip number"
+
+    - name: "L00_**_##_$$.xx"
+      description: "Low-Poly Hair Mesh"
+      notes: "** - Hair section (20 = front, 21 = side, 22 = back, 23 = extension); ## - Slot number; $$ - Flip number"
+
     - name: "AS00_**_##_$$.xa"
       description: "Hair Animator"
       notes: "** - Hair section (20 = front, 21 = side, 22 = back, 23 = extension); ## - Slot number; $$ - Flip number; Defines morph targets for hair sizing and movement"
+
     - name: "AS00_**_##_$$.bps"
       description: "Hair Physics"
       notes: "** - Hair section (20 = front, 21 = side, 22 = back, 23 = extension); ## - Slot number; $$ - Flip number"
+
     - name: "A00_60_00_0$_00.tga"
       description: "Socks Texture"
       notes: "$ - Type (0 = Thigh-Highs, 1 = Knee-Highs, 2 = Ankle Socks, 3 = Loose Socks)"
       type: "female"
+
     - name: "AA00_60_0$_00.bmp"
       description: "Socks Shadow"
       notes: "$ - Type (0 = Thigh-Highs, 1 = Knee-Highs, 2 = Ankle Socks, 3 = Loose Socks)"
@@ -150,54 +187,147 @@
     - name: "A00_10_00_00_02.bmp"
       description: "Sclera Texture"
       type: "female"
-	- name: "S00_10_00_00_02.bmp"
-      description: "Sclera Texture; faceparts male-female faces use female sclera texture."
+
+    - name: "S00_10_00_00_02.bmp"
+      description: "Sclera Texture; FaceParts male-female faces use female sclera texture."
       type: "male"
+
     - name: "A00_10_00_09.bmp"
       description: "Tongue Texture"
       type: "female"
+
     - name: "Asp00_10_00_00_00.bmp"
       description: "Face Specular Texture"
       type: "female"
+
     - name: "Ssp00_10_00_00_00.bmp"
       description: "Face Specular Texture"
       type: "male"
+
     - name: "Asp00_00_00_00_00.bmp"
       description: "Body Specular Texture"
       type: "female"
+
+    - name: "Ssp00_00_00_${height}_00.bmp"
+      description: "Body Specular Texture"
+      type: "male"
+
     - name: "Asp00_00_00_00_01.bmp"
       description: "Arms Specular Texture"
       type: "female"
+
+    - name: "Ssp00_00_00_${height}_01.bmp"
+      description: "Arms Specular Texture"
+      type: "male"
+
     - name: "A00_10_00_00_04.tga"
       description: "Blush Texture"
       type: "female"
+
     - name: "S00_10_00_00_04.tga"
       description: "Blush Texture"
       type: "male"
+
     - name: "A00_10_00_00_99.bmp"
       description: "Blush Specular Texture"
       notes: "Blush has its own \"white dots\", this can be used to remove them or change their color"
       type: "female"
+
     - name: "S00_10_00_00_99.bmp"
       description: "Blush Specular Texture"
       notes: "Blush has its own \"white dots\", this can be used to remove them or change their color"
       type: "male"
+
     - name: "EyeBrow_Outline.bmp"
       description: "Eyebrow Outline Color"
       notes: "FaceParts faces and derivatives only"
+
     - name: "IrisShineMask.bmp"
       description: "Iris Shine Mask"
       notes: "FaceParts faces and derivatives only"
       type: "female"
+
     - name: "IrisShineTex.bmp"
       description: "Iris Shine Texture"
       notes: "FaceParts faces and derivatives only"
       type: "female"
+
     - name: "LA00_12_00_00_00.bmp"
-      description: "Low Poly Eyes Texture"
+      description: "Low-Poly Eyes Texture"
       type: "female"
+
     - name: "LS00_12_00_00_00.bmp"
-      description: "Low Poly Eyes Texture"
+      description: "Low-Poly Eyes Texture"
       type: "male"
+
     - name: "Lsp00_20_00_00_00.bmp"
-      description: "Low Poly Hair Highlight Texture"
+      description: "Low-Poly Hair Highlight Texture"
+
+- category: Material Names
+  headers:
+    - Name
+    - What it is for
+    - Notes
+  data:
+    - name: "A00_M_kami"
+      description: "Hair"
+      notes: "Some special hairs have their own material names."
+
+    - name: "A00_M_kao"
+      description: "Face"
+      type: "female"
+
+    - name: "S00_M_kao"
+      description: "Face"
+      type: "male"
+
+    - name: "A00_M_body_00"
+      description: "Body"
+      notes: "Does not include fingernails, arms, or face"
+      type: "female"
+
+    - name: "S00_M_body_00"
+      description: "Body"
+      notes: "Does not include fingernails, arms, or face"
+      type: "male"
+
+    - name: "A00_M_ude_00"
+      description: "Arms"
+      type: "female"
+
+    - name: "S00_M_ude_00"
+      description: "Arms"
+      type: "male"
+
+    - name: "A00_M_tume_00"
+      description: "Fingernails"
+      type: "female"
+
+    - name: "S00_M_tume_00"
+      description: "Fingernails"
+      type: "male"
+
+    - name: "A00_M_ana_00"
+      description: "Anus"
+      notes: "Hard to see outline on this. “Ana” comes from anus"
+      type: "female"
+
+    - name: "A00_M_ha"
+      description: "Teeth"
+      notes: "Recommended to use poser to open mouth for this"
+      type: "female"
+
+    - name: "S00_M_ha"
+      description: "Teeth"
+      notes: "Recommended to use poser to open mouth for this"
+      type: "male"
+
+    - name: "A00_M_mayu"
+      description: "Eyebrows"
+      notes: "Outline color not affected by this material"
+      type: "female"
+
+    - name: "S00_M_mayu"
+      description: "Eyebrows"
+      notes: "Outline color not affected by this material"
+      type: "male"
