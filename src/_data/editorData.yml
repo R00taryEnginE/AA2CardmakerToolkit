@@ -220,6 +220,10 @@
       description: "Arms Specular Texture"
       type: "male"
 
+    - name: "Ssp00_01_00_00_00.bmp"
+      description: "Nipples Specular Texture"
+      type: "male"
+
     - name: "A00_10_00_00_04.tga"
       description: "Blush Texture"
       type: "female"
